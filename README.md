@@ -90,6 +90,36 @@ seasons neither create nor hide a trend. The fire models are checked against the
 
 Every public Python function and class has a docstring (186, checked by a script), and every exported TypeScript component and function has a one-line doc comment.
 
+## Reusing the code
+
+The analysis library has no web or UI imports, so it can be used as a whole or one routine at a time. This runs the statistics on any place with no server and no browser (`examples/quickstart.py` is the full version):
+
+```python
+from terrapulse import questions, trends
+from terrapulse.climate import PLACES, load_monthly
+from terrapulse.variables import CODES
+
+place = PLACES["Svalbard, Arctic"]
+df = load_monthly(place.lat, place.lon)               # data: 20 monthly variables, 1990-2025
+results = trends.scan(df, CODES, 1990, 2025)          # Mann-Kendall, Sen's slope, FDR, jump check
+answer = questions.answer(questions.QUESTIONS_BY_ID["hotter"], results)
+print(answer.headline)                                 # "Yes, it is warming"
+```
+
+| Reusable piece | Where | Use it for |
+|---|---|---|
+| Trend statistics | `terrapulse/trends.py` | Mann-Kendall, Sen's slope with confidence interval, Benjamini-Hochberg correction, Pettitt step-change test on any yearly series |
+| Forecasting | `terrapulse/forecast.py` | ARIMA, XGBoost and persistence models with a leakage-free rolling backtest |
+| Fire models | `terrapulse/fire.py` | Deterministic grid, Monte Carlo and particle-flow spread on any elevation array |
+| Elevation and data | `terrapulse/data.py`, `climate.py` | Cached data fetching and real elevation tiles with an offline fallback |
+| Storage | `terrapulse/db.py` | SQLite history of simulation runs and forecast benchmarks |
+
+## Documentation
+
+- Every public Python function and class has a docstring (186, checked by a script), and every exported TypeScript component and function has a one-line doc comment.
+- Each module starts with a docstring that explains what it does and how.
+- The API documents itself: run the server and open `/docs`.
+
 ## Tests (142)
 - **100 Python** (`pytest`): statistics incl. error-rate simulations, guided questions, three fire models, forecasting, database, real elevation tiles (decoding, caching, offline fallback), charts, and the **HTTP API** end to end (every endpoint, error paths, gzip, background jobs, static serving and path safety).
 - **42 front end** (`vitest`): formatting, URL state round-trips, fire colour maths, terrain exaggeration, chart configuration, API client (caching, de-duplication, errors).
