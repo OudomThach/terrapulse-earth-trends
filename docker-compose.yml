@@ -1,0 +1,26 @@
+# One command starts the whole app:   docker compose up --build
+# Open http://localhost:8088          Run the tests:   docker compose --profile test run --rm tests
+
+services:
+  terrapulse:
+    build:
+      context: .
+      target: runtime
+    image: terrapulse:1.0
+    ports:
+      - "${TERRAPULSE_PORT:-8088}:8000"   # host port 8088 (change with TERRAPULSE_PORT); 8000 is inside the container
+    environment:
+      TERRAPULSE_DB: /app/storage/terrapulse.db
+    volumes:
+      - tp-storage:/app/storage        # saved runs and benchmarks survive restarts
+    restart: unless-stopped
+
+  tests:
+    build:
+      context: .
+      target: test
+    image: terrapulse-tests:1.0
+    profiles: ["test"]
+
+volumes:
+  tp-storage:

@@ -1,0 +1,11 @@
+**/node_modules
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.git
+.shots
+.claude
+.streamlit
+web/dist
+data/terrapulse.db
+*.zip

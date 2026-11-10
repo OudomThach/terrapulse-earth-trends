@@ -1,0 +1,16 @@
+# dependencies and build output
+node_modules/
+web/dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+# local data created at run time
+data/terrapulse.db
+*.db
+# editor and tool folders
+.claude/
+.shots/
+.vscode/
+.idea/
+# archives
+*.zip

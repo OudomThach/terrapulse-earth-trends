@@ -1,0 +1,11 @@
+# Runtime dependencies of the API and the analysis package (pinned to the versions the tests ran against).
+fastapi==0.141.1
+uvicorn==0.52.1
+numpy==2.5.1
+pandas==2.3.3
+scipy==1.18.0
+scikit-learn==1.9.0
+statsmodels==0.15.0
+xgboost==3.4.0
+requests==2.34.2
+pillow==12.3.0
